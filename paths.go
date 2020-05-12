@@ -58,12 +58,12 @@ func findNode(node string, nodes []*Node) *Node {
 }
 
 // ShortestPath takes in a graph (array of nodes) and returns an array of the shortest path
-func ShortestPath(graph []*Node) {
+func ShortestPath(graph []*Node) []string {
 	var remainingNodes []*Node
 	var cementedNodes []*Node
 
 	startNode := graph[0]
-	startNode.previousNode = "first"
+	startNode.previousNode = "start"
 
 	endNode := graph[len(graph)-1]
 	endNode.nextNode = "end"
@@ -108,26 +108,27 @@ func ShortestPath(graph []*Node) {
 		currentNode = findNode(smallestNode, remainingNodes)
 	}
 
-	nextNode := "start"
+	prevNode := "end"
 	var nodeList []string
-	for nextNode != "end" {
+	for prevNode != "start" {
 		var currentNode *Node
-		if nextNode == "start" {
-			currentNode = startNode
+		if prevNode == "end" {
+			currentNode = endNode
 		} else {
 			for _, i := range graph {
-				if i.Label == nextNode {
+				if i.Label == prevNode {
 					currentNode = i
 				}
 			}
 		}
 		nodeList = append(nodeList, currentNode.Label)
-		nextNode = currentNode.nextNode
+		prevNode = currentNode.previousNode
 	}
-	fmt.Println(nodeList)
+
+	return nodeList
 }
 
 // TestMain -
 func TestMain(graph []*Node) {
-	ShortestPath(graph)
+	fmt.Println(ShortestPath(graph))
 }
