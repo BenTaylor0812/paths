@@ -1,9 +1,12 @@
 package paths
 
+import "fmt"
+
 // Node describes a node structure for the shortest path algorithm.
 type Node struct {
 	Label        string
 	NodeList     map[string]int
+	distance     int
 	previousNode string
 	nextNode     string
 }
@@ -77,6 +80,8 @@ func ShortestPath(graph []*Node) {
 			if !find(k, remainingNodes) && !find(k, cementedNodes) {
 				remainingNodes = append(remainingNodes, node)
 				shortestDistances[node.Label] = minDist + v
+				node.previousNode = currentNode.Label
+				currentNode.nextNode = node.Label
 			} else if find(k, remainingNodes) && !find(k, cementedNodes) {
 				if minDist+v < shortestDistances[node.Label] {
 					shortestDistances[node.Label] = minDist + v
@@ -102,6 +107,24 @@ func ShortestPath(graph []*Node) {
 
 		currentNode = findNode(smallestNode, remainingNodes)
 	}
+
+	nextNode := "start"
+	var nodeList []string
+	for nextNode != "end" {
+		var currentNode *Node
+		if nextNode == "start" {
+			currentNode = startNode
+		} else {
+			for _, i := range graph {
+				if i.Label == nextNode {
+					currentNode = i
+				}
+			}
+		}
+		nodeList = append(nodeList, currentNode.Label)
+		nextNode = currentNode.nextNode
+	}
+	fmt.Println(nodeList)
 }
 
 // TestMain -
