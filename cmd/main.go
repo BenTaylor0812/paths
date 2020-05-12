@@ -47,6 +47,6 @@ func main() {
 		NodeList: map[string]int{},
 	}
 
-	graph := []paths.Node{nodeA, nodeB, nodeC, nodeD, nodeE, nodeF}
-	paths.ShortestPath(graph)
+	graph := []*paths.Node{&nodeA, &nodeB, &nodeC, &nodeD, &nodeE, &nodeF}
+	paths.TestMain(graph)
 }
