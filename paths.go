@@ -58,14 +58,12 @@ func findNode(node string, nodes []*Node) *Node {
 }
 
 // ShortestPath takes in a graph (array of nodes) and returns an array of the shortest path
-func ShortestPath(graph []*Node) []string {
+func ShortestPath(startNode *Node, endNode *Node, graph []*Node) []string {
 	var remainingNodes []*Node
 	var cementedNodes []*Node
 
-	startNode := graph[0]
 	startNode.previousNode = "start"
 
-	endNode := graph[len(graph)-1]
 	endNode.nextNode = "end"
 
 	currentNode := startNode
@@ -73,12 +71,19 @@ func ShortestPath(graph []*Node) []string {
 	shortestDistances := map[string]int{startNode.Label: 0}
 
 	for len(cementedNodes) != len(graph) {
+		fmt.Println(currentNode.Label)
 		var minDist = shortestDistances[currentNode.Label]
 		firstIt := true
+		fmt.Println("========================")
+		fmt.Println("Node is:", currentNode.Label)
+		fmt.Println("========================")
 		for k, v := range currentNode.NodeList {
+			fmt.Printf("k value is : %s\n", k)
 			node := findNode(k, graph)
+			fmt.Println("Looking at node: ", node)
 			if !find(k, remainingNodes) && !find(k, cementedNodes) {
 				remainingNodes = append(remainingNodes, node)
+				fmt.Println("The node label is:", node.Label)
 				shortestDistances[node.Label] = minDist + v
 				node.previousNode = currentNode.Label
 				currentNode.nextNode = node.Label
@@ -88,7 +93,14 @@ func ShortestPath(graph []*Node) []string {
 					node.previousNode = currentNode.Label
 					currentNode.nextNode = node.Label
 				}
+			} else {
+				fmt.Println(k, "is a cemented element.")
 			}
+		}
+
+		fmt.Println("Nodes left")
+		for _, i := range remainingNodes {
+			fmt.Println(*i)
 		}
 
 		cementedNodes = append(cementedNodes, currentNode)
@@ -104,7 +116,7 @@ func ShortestPath(graph []*Node) []string {
 				firstIt = false
 			}
 		}
-
+		fmt.Println("The smallest node is:", smallestNode)
 		currentNode = findNode(smallestNode, remainingNodes)
 	}
 
@@ -121,14 +133,9 @@ func ShortestPath(graph []*Node) []string {
 				}
 			}
 		}
-		nodeList = append(nodeList, currentNode.Label)
+		nodeList = append([]string{currentNode.Label}, nodeList...)
 		prevNode = currentNode.previousNode
 	}
 
 	return nodeList
-}
-
-// TestMain -
-func TestMain(graph []*Node) {
-	fmt.Println(ShortestPath(graph))
 }
