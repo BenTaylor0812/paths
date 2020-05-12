@@ -1,7 +1,5 @@
 package paths
 
-import "fmt"
-
 // Node describes a node structure for the shortest path algorithm.
 type Node struct {
 	Label        string
@@ -71,19 +69,12 @@ func ShortestPath(startNode *Node, endNode *Node, graph []*Node) []string {
 	shortestDistances := map[string]int{startNode.Label: 0}
 
 	for len(cementedNodes) != len(graph) {
-		fmt.Println(currentNode.Label)
 		var minDist = shortestDistances[currentNode.Label]
 		firstIt := true
-		fmt.Println("========================")
-		fmt.Println("Node is:", currentNode.Label)
-		fmt.Println("========================")
 		for k, v := range currentNode.NodeList {
-			fmt.Printf("k value is : %s\n", k)
 			node := findNode(k, graph)
-			fmt.Println("Looking at node: ", node)
 			if !find(k, remainingNodes) && !find(k, cementedNodes) {
 				remainingNodes = append(remainingNodes, node)
-				fmt.Println("The node label is:", node.Label)
 				shortestDistances[node.Label] = minDist + v
 				node.previousNode = currentNode.Label
 				currentNode.nextNode = node.Label
@@ -94,13 +85,7 @@ func ShortestPath(startNode *Node, endNode *Node, graph []*Node) []string {
 					currentNode.nextNode = node.Label
 				}
 			} else {
-				fmt.Println(k, "is a cemented element.")
 			}
-		}
-
-		fmt.Println("Nodes left")
-		for _, i := range remainingNodes {
-			fmt.Println(*i)
 		}
 
 		cementedNodes = append(cementedNodes, currentNode)
@@ -116,7 +101,6 @@ func ShortestPath(startNode *Node, endNode *Node, graph []*Node) []string {
 				firstIt = false
 			}
 		}
-		fmt.Println("The smallest node is:", smallestNode)
 		currentNode = findNode(smallestNode, remainingNodes)
 	}
 
