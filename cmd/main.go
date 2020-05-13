@@ -394,5 +394,8 @@ func main() {
 		fmt.Println(paths.ShortestPath(&node1B, &node1C, graph1))
 		fmt.Println(paths.ShortestPath(&nodeA, &nodeF, graph))
 	}
-	fmt.Println(paths.ShortestPath(&gameE6, &gameC6, game))
+	list, err := paths.ShortestPath(&gameE6, &gameE5, game)
+	if err == nil {
+		fmt.Println(list)
+	}
 }
